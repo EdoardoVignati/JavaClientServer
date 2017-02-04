@@ -7,11 +7,11 @@ public class Store{
 		items=0;
 	}
 
-	public void add(){
+	public synchronized void add(){
 		items++;
 	}
 	
-	public void remove(){
+	public synchronized void remove(){
 		items--;
 	}
 
