@@ -8,7 +8,7 @@ public class MultiTrisThreadServer{
 		
 		int port = 55000;
 		ServerSocket s =null;
-		int player=1;
+		int player=0;
 		
 		Socket toCln=null;
 		Tris t = new Tris();
