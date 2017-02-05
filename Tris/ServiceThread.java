@@ -5,78 +5,84 @@ public class ServiceThread extends Thread{
 
 	Socket toCln;
 	int player=0;
-	Tris table;
+	Tris t;
 
 	public ServiceThread(Socket s, int num, Tris t){
 	
 		toCln = s;
-		table = t;
+		this.t = t;
 		player=num;
 	}
 
 	public void run(){
 
-		InputStream in;
-		OutputStream out;
-
+		Sender sender = null;
 		byte[] buffer = new byte [1000];
 		int length;
 		int items;
-		String mex []= new String[9];
+		String[] str ;
 		String symbol;
 		String mexToCln;
-		Tris t=null;
 
 		try{
-			in = toCln.getInputStream();
-			out = toCln.getOutputStream();
-
-			while(true){
-
-				length = in.read(buffer);
-
-				if(length<=0)
-					break;
-
-				mex[0] = new String(buffer, 0, length);
-
+		 sender = new Sender(toCln);			
+		 if(player ==1){
+			sender.send("METTITI AD ASPETTARE L' ALTRO GIOCATORE");
+		 	t.endRound();	
+		 }
+			
 		
-				if(mex[0].compareTo("exit")==0)
+	
+			
+			while(true){
+				if(t.isWinner()){//deve essere prima della read se no ciao
+					//qualcuno ha vinto non si sa ancora chi
+					sender.send("Qualcuno ha vinto bravohhhhh");
 					break;
+				}
+				
+				str=sender.read().split(" ");
 
-				mex = mex[0].split(" ");
 
-
-				switch (mex[0]){
+				switch (str[0]){
 
 				/*case "play" :
 				    	 out.write("Game table created. Use 'help' to continue.".getBytes());
 					 break;*/
 
 				case "set" : 
-					 table.setSymbol(mex[1],Integer.parseInt(mex[2]),Integer.parseInt(mex[3]));
-					 out.write("Set the symbol".getBytes());
-					 table.startRound();
-					 table.endRound();
+					 t.setSymbol(str[1],Integer.parseInt(str[2]),Integer.parseInt(str[3]));
+					 sender.send("Set the symbol");
 					 break;
 
 				case "?" : 	
-					 mexToCln = "Current table : \n" + table.getTable();
-					 out.write(mexToCln.getBytes());
+					 mexToCln = "Current table : \n" + t.getTable();
+					 sender.send(mexToCln);
 					 break;
 
 				default:
 					mexToCln = "Use 'set sym x y' to set your symbol on table or '?' to get the table";
-					out.write(mexToCln.getBytes());				
+					sender.send(mexToCln);				
 					break;
 
-				}				
+				}	
+				
+				if(t.isWinner()){
+					//chiudi tutto e notifica per risvegliare l' altro thread
+				}else{
+					table.startRound();
+					 table.endRound();	
+				}
 			}
 
 			toCln.close();
 			System.out.println("Client socket closed");
 			
-		}catch(Exception e){
+		}catch(CloseSocketChannelException e ){
+			System.out.println("SERVER: il client ha interrotto la comunicazione");
+			//chiudi la socket e sveglia gli altri
+		}
+		catch(Exception e){
 			System.out.println("Exception handled");
 			e.printStackTrace();
 
