@@ -24,7 +24,14 @@ public class MultiTrisThreadServer{
 					player++;
 					ServiceThread sThread = new ServiceThread(toCln, player, t);
 					new Thread(sThread).start();
-				
+				if(player==3){ //vado in wait di tot secondi e ogni volta che mi risveglio controllo se è finita la partita
+					while(! t.isWinner();){
+						t.startRound();
+						t.startEndRound();
+					}
+					System.out.println("SERVER: hanno finito di giocare.");
+					break;
+				}
 			}			
 
 			
