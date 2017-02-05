@@ -24,7 +24,7 @@ public class MultiThreadServer{
 				toCln = s.accept();	
 
 					ServiceThread sThread = new ServiceThread(toCln, mag);
-					new Thread(sThread).start();
+					sThread.start();
 				
 			}			
 

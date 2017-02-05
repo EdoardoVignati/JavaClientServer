@@ -11,7 +11,7 @@ public class Tris{
     			Arrays.fill(row, "-");
 	} 
 
-	public void setSymbol(String sym, int x, int y){
+	public synchronized void setSymbol(String sym, int x, int y){
 	
 		table[x][y]=sym;
 	}

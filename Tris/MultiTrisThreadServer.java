@@ -23,7 +23,7 @@ public class MultiTrisThreadServer{
 				toCln = s.accept();	
 					player++;
 					ServiceThread sThread = new ServiceThread(toCln, player, t);
-					new Thread(sThread).start();
+					sThread.start();
 				
 			}			
 
