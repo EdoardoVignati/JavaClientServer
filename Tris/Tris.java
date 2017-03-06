@@ -23,15 +23,11 @@ public class Tris{
 			table[0][2] + " | " + table[1][2] + " | " + table[2][2]
 		);
 	}
-
+	public boolean isWinner(){
+		return false;	
+	}
 	public synchronized void startRound(){
-
-		try{
 			notify();	
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 	}
 
 	public synchronized void endRound(){
