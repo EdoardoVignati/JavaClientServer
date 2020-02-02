@@ -1,3 +1,3 @@
 # JavaClientServer
 
-This repo contains basic examples of different types of Client-Server communication.
+Basic examples of different types of Client-Server communication in Java.
